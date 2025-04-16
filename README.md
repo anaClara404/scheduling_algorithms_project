@@ -12,7 +12,7 @@ Simula os principais algoritmos de escalonamento de CPU: FCFS, SJF, Prioridade, 
 
 ## 🛠️ Compilação
 
-Requisitos:
-- Linux
-- g++
-- make
+Para compilar o programa, é necessário ter o compilador GCC instalado na sua máquina, que permite a compilação e execução de arquivos C++ através do G++
+
+Passo a passo:
+
