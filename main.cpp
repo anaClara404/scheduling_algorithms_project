@@ -1,112 +1,85 @@
 #include <iostream>
-#include <vector>
-#include "scheduler.h"
+#include "Task.h"
+#include "RoundRobin.h"
+#include "readTasks.h"
 
-using namespace std;
+void showWelcome() {
+    std::cout << "==================================================\n";
+    std::cout << "|Simulador de Algoritmos de Escalonamento de CPU |\n";
+    std::cout << "==================================================\n\n";
+}
+
+void showMenu() {
+    std::cout << "Algoritmos disponíveis:\n";
+    std::cout << "1. First Come First Served (FCFS)\n";
+    std::cout << "2. Shortest Job First (SJF)\n";
+    std::cout << "3. Prioridade (sem preempção)\n";
+    std::cout << "4. Round Robin\n";
+    std::cout << "5. Round Robin (com prioridade)\n";
+    std::cout << "Digite sua escolha (1-5): ";
+}
 
 int main() {
+    showWelcome();
+    showMenu();
+
+    // Verifica se a opção digitada é válida
     int choice;
-    vector<Process> processes;
-    int n;
+    do {
+        std::cin >> choice;
 
-    cout << "Simulador de Algoritmos de Escalonamento de CPU" << endl;
-    cout << "Digite o numero de processos: ";
-    cin >> n;
+        if (choice < 1 || choice > 5) {
+            std::cout << "\nOpção inválida!\n\nDigite sua escolha (1-5): ";
+        }
 
-    // coleta dados dos processos
-    for (int i = 0; i < n; ++i) {
-        Process p;
-        p.id = i + 1;
-        cout << "Processo P" << p.id << ":\n";
-        cout << "  Tempo de chegada: ";
-        cin >> p.arrivalTime;
-        cout << "  Burst time: ";
-        cin >> p.burstTime;
-        p.remainingTime = p.burstTime;
-        processes.push_back(p);
-    }
+    } while (choice < 1 || choice > 5);
 
-    cout << "\nEscolha o algoritmo:\n1. FCFS\n> ";
-    cin >> choice;
+    std::string filename;
+    std::cout << "\nDigite o nome do arquivo contendo os processos (nome.txt): ";
+    std::cin >> filename;
 
+    auto tasks = readTasks(filename);
+
+    // *Terminar esse switch com todos os algoritmos quando estiverem implementados*
+    // O switch chama o algoritmo correspondente ao número digitado
     switch (choice) {
+        // 1. First Come First Served (FCFS)
         case 1:
-            fcfs(processes);
+            std::cout << "Executando FCFS...\n";
+            // FCFS fcfs(tasks);
+            // fcfs.schedule();
             break;
-        default:
-            cout << "Opcao invalida." << endl;
+
+        // 2. Shortest Job First (SJF)
+        case 2:
+            std::cout << "Executando SJF...\n";
+            // SJF sjf(tasks);
+            // sjf.schedule();
+            break;
+
+        // 3. Prioridade (sem preempção)
+        case 3:
+            std::cout << "Executando Prioridade...\n";
+            // Priority priority(tasks);
+            // priority.schedule();
+            break;
+
+        // 4. Round Robin
+        case 4:
+            std::cout << "Executando Round Robin...\n";
+            {
+                RoundRobin rr(tasks);
+                rr.schedule();
+            }
+            break;
+
+        // 5. Round Robin (com prioridade)
+        case 5:
+            std::cout << "Executando Round Robin com Prioridade...\n";
+            // RoundRobinPriority rr_priority(tasks);
+            // rr_priority.schedule();
+            break;
     }
 
     return 0;
 }
-
-// scheduler.h
-#ifndef SCHEDULER_H
-#define SCHEDULER_H
-
-#include <vector>
-
-struct Process {
-    int id;
-    int arrivalTime;
-    int burstTime;
-    int remainingTime;
-    int completionTime;
-    int waitingTime;
-    int turnaroundTime;
-};
-
-void fcfs(std::vector<Process>& processes);
-
-#endif
-
-// scheduler.cpp
-#include "scheduler.h"
-#include <iostream>
-#include <iomanip>
-#include <algorithm>
-
-using namespace std;
-
-void fcfs(vector<Process>& processes) {
-    // Ordena por tempo de chegada
-    sort(processes.begin(), processes.end(), [](Process a, Process b) {
-        return a.arrivalTime < b.arrivalTime;
-    });
-
-    int currentTime = 0;
-    float totalWaiting = 0, totalTurnaround = 0;
-
-    cout << "\n[ Gantt Chart ]\n";
-
-    for (auto& p : processes) {
-        if (currentTime < p.arrivalTime)
-            currentTime = p.arrivalTime;
-
-        cout << "| P" << p.id << " ";
-
-        p.waitingTime = currentTime - p.arrivalTime;
-        p.completionTime = currentTime + p.burstTime;
-        p.turnaroundTime = p.completionTime - p.arrivalTime;
-
-        currentTime += p.burstTime;
-
-        totalWaiting += p.waitingTime;
-        totalTurnaround += p.turnaroundTime;
-    }
-    cout << "|" << endl;
-
-    cout << "\nTabela de resultados:\n";
-    cout << "ID\tChegada\tBurst\tEspera\tTurnaround\n";
-    for (auto& p : processes) {
-        cout << "P" << p.id << "\t" << p.arrivalTime << "\t"
-             << p.burstTime << "\t" << p.waitingTime << "\t"
-             << p.turnaroundTime << endl;
-    }
-
-    cout << fixed << setprecision(2);
-    cout << "\nTempo medio de espera: " << totalWaiting / processes.size() << endl;
-    cout << "Tempo medio de turnaround: " << totalTurnaround / processes.size() << endl;
-}
-
-

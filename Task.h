@@ -17,7 +17,7 @@ public:
     int startTime;
     int endTime;
     
-    bool executing;
+    bool started; // Flag que define se o processo já iniciou sua execução alguma vez
 
     Task(const std::string& n, int p, int b);
 };
