@@ -25,9 +25,9 @@ std::list<Task> readTasks(const std::string& filename) {
 
         if (std::getline(ss, name, ',') && ss >> priority) {
             char comma;
-            ss >> comma; // para ignorar a vírgula depois do priority
+            ss >> comma;
             if (ss >> burst) {
-                // Remover espaços extras no nome (opcional)
+                // Remover espaços extras no nome
                 name.erase(std::remove_if(name.begin(), name.end(), ::isspace), name.end());
                 tasks.emplace_back(name, priority, burst);
             } else {
