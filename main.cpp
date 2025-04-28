@@ -2,6 +2,7 @@
 #include "Task.h"
 #include "RoundRobin.h"
 #include "readTasks.h"
+#include "FCFS.h"
 
 void showWelcome() {
     std::cout << "==================================================\n";
@@ -46,8 +47,10 @@ int main() {
         // 1. First Come First Served (FCFS)
         case 1:
             std::cout << "Executando FCFS...\n";
-            // FCFS fcfs(tasks);
-            // fcfs.schedule();
+            {
+                FCFS fcfs(tasks);
+                fcfs.schedule();
+            }
             break;
 
         // 2. Shortest Job First (SJF)
