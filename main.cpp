@@ -3,6 +3,7 @@
 #include "RoundRobin.h"
 #include "readTasks.h"
 #include "FCFS.h"
+#include "SJF.h"
 
 void showWelcome() {
     std::cout << "==================================================\n";
@@ -56,8 +57,10 @@ int main() {
         // 2. Shortest Job First (SJF)
         case 2:
             std::cout << "Executando SJF...\n";
-            // SJF sjf(tasks);
-            // sjf.schedule();
+            {
+                SJF sjf(tasks);
+                sjf.schedule();
+            }            
             break;
 
         // 3. Prioridade (sem preempção)
