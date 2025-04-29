@@ -4,6 +4,7 @@
 #include "readTasks.h"
 #include "FCFS.h"
 #include "SJF.h"
+#include "Priority.h"
 
 void showWelcome() {
     std::cout << "==================================================\n";
@@ -66,8 +67,10 @@ int main() {
         // 3. Prioridade (sem preempção)
         case 3:
             std::cout << "Executando Prioridade...\n";
-            // Priority priority(tasks);
-            // priority.schedule();
+            {
+                Priority priority(tasks);
+                priority.schedule();
+            }
             break;
 
         // 4. Round Robin
