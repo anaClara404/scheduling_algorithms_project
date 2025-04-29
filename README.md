@@ -25,7 +25,7 @@ Cada algoritmo utiliza uma lista de tarefas e calcula diversos tempos de execuç
 ## Compilação:
 - comando: git clone <https://github.com/anaClara404/scheduling_algorithms_project> ;
 - cd <diretorio-do-repositorio>
-(CONTINUAR INSTRUÇÕES P/ COMPILAR TODOS OS EXECUTÁVEIS!!)
+- compilar: g++ -o scheduler main.cpp FCFS.cpp SJF.cpp RoundRobin.cpp Priority.cpp Task.cpp readTasks.cpp
 - Após a compilação, executar o programa: ./scheduler
 
 ## Arquivo de entrada
