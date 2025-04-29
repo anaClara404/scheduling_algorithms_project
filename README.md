@@ -14,5 +14,4 @@ Simula os principais algoritmos de escalonamento de CPU: FCFS, SJF, Prioridade, 
 
 Requisitos:
 - Linux
-- g++
-- make
+
