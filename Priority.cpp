@@ -1,24 +1,54 @@
 #include "Priority.h"
 #include <iostream>
 
-Priority::Priority(const std::list<Task>& taskList) : taskList(taskList) {}
+Priority::Priority(const std::list<Task>& tasks) : taskList(tasks) {}
 
-// Executa o escalonamento baseado em prioridade (menor valor = maior prioridade)
 void Priority::schedule() {
+    int currentTime = 0;
+    int finalTurnaroundTime = 0;
+    int finalWaitingTime = 0;
+    int finalResponseTime = 0;
+    int taskAmount = taskList.size();
+
     while (!taskList.empty()) {
         Task currentTask = pickNextTask();
-        std::cout << "Executando tarefa: " << currentTask.name
-                  << " com prioridade " << currentTask.priority
-                  << " por " << currentTask.burst << " unidades de tempo." << std::endl;
+
+        // Define tempo de início
+        if (!currentTask.started) {
+            currentTask.startTime = currentTime;
+            currentTask.started = true;
+        }
+
+        // Simula execução
+        currentTask.endTime = currentTask.startTime + currentTask.burst;
+        currentTime = currentTask.endTime;
+
+        // Calcula métricas
+        int taskTurnaroundTime = currentTask.endTime - currentTask.arrivalTime;
+        int taskWaitingTime = taskTurnaroundTime - currentTask.burst;
+        int taskResponseTime = currentTask.startTime - currentTask.arrivalTime;
+
+        // Acumuladores
+        finalTurnaroundTime += taskTurnaroundTime;
+        finalWaitingTime += taskWaitingTime;
+        finalResponseTime += taskResponseTime;
+
+        // Exibição por processo
+        std::cout << "Processo [" << currentTask.name << "] finalizou sua execução.\n"
+                  << "Tempo de turnaround: " << taskTurnaroundTime << "\n"
+                  << "Tempo de espera: " << taskWaitingTime << "\n"
+                  << "Tempo de resposta: " << taskResponseTime << "\n\n";
     }
+
+    // Exibição das médias
+    std::cout << "===== Todos os processos foram finalizados. =====\n";
+    std::cout << "-> Tempo médio de turnaround: " << (float)finalTurnaroundTime / taskAmount << "\n";
+    std::cout << "-> Tempo médio de espera: " << (float)finalWaitingTime / taskAmount << "\n";
+    std::cout << "-> Tempo médio de resposta: " << (float)finalResponseTime / taskAmount << "\n";
 }
 
-// Seleciona a tarefa com maior prioridade (menor número)
 Task Priority::pickNextTask() {
-    if (taskList.empty()) {
-        throw std::runtime_error("Não há tarefas para escalonar.");
-    }
-
+    // Encontra o processo com maior prioridade (menor valor numérico)
     auto highestPriorityIt = taskList.begin();
     for (auto it = taskList.begin(); it != taskList.end(); ++it) {
         if (it->priority < highestPriorityIt->priority) {
