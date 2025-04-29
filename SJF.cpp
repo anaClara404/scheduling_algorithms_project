@@ -33,7 +33,7 @@ void SJF::schedule() {
         finalWaitingTime += taskWaitingTime;
         finalResponseTime += taskResponseTime;
 
-        // Exibe resultados do processo
+        // Exibe os tempos calculados na execução do processo
         std::cout << "Processo [" << currentTask.name << "] finalizou sua execução.\n"
                   << "Tempo de turnaround: " << taskTurnaroundTime << "\n"
                   << "Tempo de espera: " << taskWaitingTime << "\n"
