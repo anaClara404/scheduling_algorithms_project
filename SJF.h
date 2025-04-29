@@ -11,8 +11,7 @@ private:
 
 public:
     SJF(const std::list<Task>& taskList);
-
-    void schedule() override;
+     void schedule() override;
 
     // Escolhe a próxima tarefa (a de menor burst)
     Task pickNextTask() override;
