@@ -1,6 +1,8 @@
 #include "FCFS.h"
 #include <iostream>
 
+FCFS::FCFS(const std::list<Task>& tasks) : taskList(tasks) {}
+
 void FCFS::schedule() {
     int currentTime = 0;
     int finalTurnaroundTime = 0;
