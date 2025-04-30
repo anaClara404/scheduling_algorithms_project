@@ -7,11 +7,11 @@ const int RoundRobinPriority::QUANTUM = 10;
 RoundRobinPriority::RoundRobinPriority(const std::list<Task>& taskList) : taskList(taskList) {}
 
 void RoundRobinPriority::schedule() {
-    int currentTime = 0;
-    int finalTurnaroundTime = 0;
-    int finalWaitingTime = 0;
-    int finalResponseTime = 0;
-    int taskAmount = taskList.size();
+    int currentTime = 0; // Tempo atual do escalonador
+    int finalTurnaroundTime = 0; // Tempo total de turnaround dos processos
+    int finalWaitingTime = 0; // Tempo total de espera dos processos
+    int finalResponseTime = 0; // Tempo total de resposta dos processos
+    int taskAmount = taskList.size(); // Total de processos a serem escalonados
     
     // O algoritmo irá executar enquanto a lista conter processos não finalizados
     while (taskList.empty() == false) {
@@ -31,6 +31,7 @@ void RoundRobinPriority::schedule() {
 
         }
 
+        // Define o tempo de execução como sendo o menor entre o tempo restante do processo e o quantum
         int elapsedTime = std::min(currentTask.remainingBurst, QUANTUM);
 
         std::cout << "Processo [" << currentTask.name << "] executando por " << elapsedTime << " unidades de tempo.\n";
@@ -38,15 +39,22 @@ void RoundRobinPriority::schedule() {
         currentTime += elapsedTime;
         currentTask.remainingBurst -= elapsedTime;
 
+        /* Se ainda houver tempo restante no processo, ele volta para o final da lista
+        e continua sua execução. Se não, calculam-se os tempos de turnaround, espera
+        e resposta do processo e printa para o usuário, além de acumular os tempos para
+        o cálculo das médias no final do escalonamento */
         if (currentTask.remainingBurst > 0) {
             taskList.push_back(currentTask);
         } else {
+            // Se o processo terminou, calcula o tempo que terminou
             currentTask.endTime = currentTime;
 
+            // Calcula os tempos de turnaround, espera e resposta do processo finalizado
             int taskTurnaroundTime = currentTask.endTime - currentTask.arrivalTime;
             int taskWaitingTime = taskTurnaroundTime - currentTask.burst;
             int taskResponseTime = currentTask.startTime - currentTask.arrivalTime;
 
+            // Acumula os tempos para o cálculo das médias
             finalTurnaroundTime += taskTurnaroundTime;
             finalWaitingTime += taskWaitingTime;
             finalResponseTime += taskResponseTime;
