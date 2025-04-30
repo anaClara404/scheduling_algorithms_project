@@ -23,10 +23,10 @@ Cada algoritmo utiliza uma lista de tarefas e calcula diversos tempos de execuç
 - Compilador g++
   
 ## Compilação:
-- comando: git clone <https://github.com/anaClara404/scheduling_algorithms_project> ;
-- cd <diretorio-do-repositorio>
-- compilar: g++ -o scheduler main.cpp FCFS.cpp SJF.cpp RoundRobin.cpp Priority.cpp Task.cpp readTasks.cpp
-- Após a compilação, executar o programa: ./scheduler
+- Instalar o repositório localmente: ``git clone <https://github.com/anaClara404/scheduling_algorithms_project>``
+- Entrar no diretório do repositório: ``cd <diretorio-do-repositorio>``
+- Compilar no terminal GCC: ``g++ -o scheduler main.cpp FCFS.cpp SJF.cpp RoundRobin.cpp RoundRobinPriority.cpp Priority.cpp Task.cpp readTasks.cpp``
+- Após a compilação, executar o programa no terminal: ``./scheduler``
 
 ## Arquivo de entrada
 O programa espera um arquivo de entrada contendo as tarefas a serem escalonadas. O formato do arquivo deve ser:
