@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Task.h"
 #include "RoundRobin.h"
+#include "RoundRobinPriority.h"
 #include "readTasks.h"
 
 void showWelcome() {
@@ -76,8 +77,10 @@ int main() {
         // 5. Round Robin (com prioridade)
         case 5:
             std::cout << "Executando Round Robin com Prioridade...\n";
-            // RoundRobinPriority rr_priority(tasks);
-            // rr_priority.schedule();
+            {
+                RoundRobinPriority rrp(tasks);
+                rrp.schedule();
+            }
             break;
     }
 

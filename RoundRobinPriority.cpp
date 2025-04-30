@@ -1,0 +1,76 @@
+#include "RoundRobinPriority.h"
+#include <iostream>
+#include <algorithm>
+
+const int RoundRobinPriority::QUANTUM = 10;
+
+RoundRobinPriority::RoundRobinPriority(const std::list<Task>& taskList) : taskList(taskList) {}
+
+void RoundRobinPriority::schedule() {
+    int currentTime = 0;
+    int finalTurnaroundTime = 0;
+    int finalWaitingTime = 0;
+    int finalResponseTime = 0;
+    int taskAmount = taskList.size();
+    
+    // O algoritmo irá executar enquanto a lista conter processos não finalizados
+    while (taskList.empty() == false) {
+        Task currentTask = pickNextTask();
+
+        // Remover o processo da lista quando ele for escalonado
+        auto it = std::find_if(taskList.begin(), taskList.end(),
+                               [&currentTask](const Task& t) { return t.name == currentTask.name; });
+        if (it != taskList.end()) {
+            taskList.erase(it);
+        }
+
+        // Verifica a flag do processo ter sido iniciado, para começar a contagem de tempo de execução
+        if (currentTask.started == false) {
+            currentTask.startTime = currentTime;
+            currentTask.started = true;
+
+        }
+
+        int elapsedTime = std::min(currentTask.remainingBurst, QUANTUM);
+
+        std::cout << "Processo [" << currentTask.name << "] executando por " << elapsedTime << " unidades de tempo.\n";
+
+        currentTime += elapsedTime;
+        currentTask.remainingBurst -= elapsedTime;
+
+        if (currentTask.remainingBurst > 0) {
+            taskList.push_back(currentTask);
+        } else {
+            currentTask.endTime = currentTime;
+
+            int taskTurnaroundTime = currentTask.endTime - currentTask.arrivalTime;
+            int taskWaitingTime = taskTurnaroundTime - currentTask.burst;
+            int taskResponseTime = currentTask.startTime - currentTask.arrivalTime;
+
+            finalTurnaroundTime += taskTurnaroundTime;
+            finalWaitingTime += taskWaitingTime;
+            finalResponseTime += taskResponseTime;
+
+            std::cout << "Processo [" << currentTask.name << "] finalizou sua execução.\n"
+                      << "Tempo de turnaround: " << taskTurnaroundTime << "\n"
+                      << "Tempo de espera: " << taskWaitingTime << "\n"
+                      << "Tempo de resposta: " << taskResponseTime << "\n\n";
+        }
+    }
+
+    std::cout << "===== Todos os processos foram finalizados. =====\n";
+    std::cout << "-> Tempo médio de turnaround: " << (float)finalTurnaroundTime / taskAmount << "\n";
+    std::cout << "-> Tempo médio de espera: " << (float)finalWaitingTime / taskAmount << "\n";
+    std::cout << "-> Tempo médio de resposta: " << (float)finalResponseTime / taskAmount << "\n";
+}
+
+// Seleciona o processo com maior prioridade (menor valor numérico)
+Task RoundRobinPriority::pickNextTask() {
+    auto highestPriorityIt = taskList.begin();
+    for (auto it = taskList.begin(); it != taskList.end(); ++it) {
+        if (it->priority < highestPriorityIt->priority) {
+            highestPriorityIt = it;
+        }
+    }
+    return *highestPriorityIt;
+}
