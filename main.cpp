@@ -3,6 +3,9 @@
 #include "RoundRobin.h"
 #include "RoundRobinPriority.h"
 #include "readTasks.h"
+#include "FCFS.h"
+#include "SJF.h"
+#include "Priority.h"
 
 void showWelcome() {
     std::cout << "==================================================\n";
@@ -47,22 +50,28 @@ int main() {
         // 1. First Come First Served (FCFS)
         case 1:
             std::cout << "Executando FCFS...\n";
-            // FCFS fcfs(tasks);
-            // fcfs.schedule();
+            {
+                FCFS fcfs(tasks);
+                fcfs.schedule();
+            }
             break;
 
         // 2. Shortest Job First (SJF)
         case 2:
             std::cout << "Executando SJF...\n";
-            // SJF sjf(tasks);
-            // sjf.schedule();
+            {
+                SJF sjf(tasks);
+                sjf.schedule();
+            }            
             break;
 
         // 3. Prioridade (sem preempção)
         case 3:
             std::cout << "Executando Prioridade...\n";
-            // Priority priority(tasks);
-            // priority.schedule();
+            {
+                Priority priority(tasks);
+                priority.schedule();
+            }
             break;
 
         // 4. Round Robin
